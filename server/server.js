@@ -13,7 +13,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(require('./routes/usuario')); // importamos CRUD
+
+//configuracion global de rutas
+app.use(require('./routes/index')); // importamos CRUD
+
 // escribimos aqui este codigo sin comentar
 ///////////////////////////////////////////////////
 // app.get('/usuario', function(req, res) {

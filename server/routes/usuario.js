@@ -5,11 +5,20 @@ const _ = require('underscore');
 //importamos le modelo
 const Usuario = require('../models/usuario'); //noma Usuario 
 const usuario = require('../models/usuario');
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
 const app = express()
 
-app.get('/usuario', function(req, res) {
 
+// 1 link/middlewares/callback
+app.get('/usuario', verificaToken, (req, res) => {
+
+    //con esto estamos usando el resultado de verificaToken del autenticacion
+    /* return res.json({
+        usuario: req.usuario,
+        nombre: req.usuario.nombre,
+        email: req.usuario.email
+    }) */
     let desde = req.query.desde || 0; //recive en cuerpo le limite
     //ejemplo link?desde=10 se salta los primeros 10
     desde = Number(desde)
@@ -49,7 +58,7 @@ app.get('/usuario', function(req, res) {
 })
 
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
 
     let body = req.body; //como esta body parse captura lo que trae 
 
@@ -102,7 +111,7 @@ app.post('/usuario', function(req, res) {
     // }
 })
 
-app.put('/usuario/:id', function(req, res) { // es el parametro
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) { // es el parametro
 
     let id = req.params.id; // recupera el parametro id de la url y lo grega a id
     //F2
@@ -136,7 +145,7 @@ app.put('/usuario/:id', function(req, res) { // es el parametro
 
 })
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
     // res.json('delete usuario')
     let id = req.params.id;
     //Delete Lo elimina definitivamente
@@ -181,7 +190,7 @@ app.delete('/usuario/:id', function(req, res) {
         };
         res.json({
             ok: true,
-            usuario: usuarioDB
+            usuario: usuarioBorrado
         });
     })
 
