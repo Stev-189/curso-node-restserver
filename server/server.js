@@ -2,17 +2,24 @@ require('./config/config'); // ejecuta primero archivo de ocnfiguracion
 
 const express = require('express')
 const mongoose = require('mongoose'); // importar libreria de mongo
-const app = express()
+//para que funcion path del public
+const path = require('path');
+
+const app = express();
 
 ///////////////////////////////////////////////////
 //Body-Parse
-const bodyParser = require('body-parser')
-    // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+const bodyParser = require('body-parser');
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
 
+//habilitar la carpeta public
+app.use(express.static(path.resolve(__dirname, '../public')));
+
+//console.log(path.resolve(__dirname, '../public'));
 
 //configuracion global de rutas
 app.use(require('./routes/index')); // importamos CRUD
