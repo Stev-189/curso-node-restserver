@@ -37,4 +37,23 @@ let verificaAdmin_Role = (req, res, next) => {
     }
 };
 
-module.exports = { verificaToken, verificaAdmin_Role }
+//======================
+//Verificar Token IMG en url ?token=112233
+//======================
+let verificaTokenImg = (req, res, next) => {
+    let token = req.query.token;
+    jwt.verify(token, process.env.SEED, (err, decode) => {
+        if (err) {
+            return res.status(401).json({ // aqui el error es un erro de estatus del server
+                ok: false,
+                err: {
+                    message: 'Token no Valido'
+                }
+            })
+        }
+        //si todo esta ok al req le asigna le valor dle token de usuario
+        req.usuario = decode.usuario; // del token obetine el usuario
+        next();
+    })
+}
+module.exports = { verificaToken, verificaAdmin_Role, verificaTokenImg }

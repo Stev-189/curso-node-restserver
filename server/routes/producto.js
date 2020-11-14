@@ -66,13 +66,13 @@ app.get('/producto/:id', verificaToken, (req, res) => {
 
 
 //=====================
-//Buscar producto
+//Buscar producto 
 //=====================
 app.get('/producto/buscar/:termino', verificaToken, (req, res) => {
-    let termino = req.params.termino;
+    let termino = req.params.termino; // las busqueda la hacemos por terminos del nombre y con expreciones regulares
     let regex = new RegExp(termino, 'i')
     Producto.find({ disponible: true, nombre: regex })
-        .populate('categoria', 'descripcion')
+        .populate('categoria', 'descripcion') // COMPLETA el resultado con la de3scripccion de la categopria
         .exec((err, productos) => {
             if (err) {
                 return res.status(500).json({
@@ -86,8 +86,6 @@ app.get('/producto/buscar/:termino', verificaToken, (req, res) => {
             })
         })
 })
-
-
 
 //=====================
 //Crear un nuevo producto
